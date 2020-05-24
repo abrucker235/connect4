@@ -25,11 +25,10 @@ func (b *Board) move(column int, row int, player string) (bool, error) {
 	b.CheckHorizontal(row, column)
 	if b.connected >= 3 {
 		return true, nil
-	} else {
-		b.connected = 0
 	}
+	b.connected = 0
 
-	b.checkVertical(column, row)
+	b.CheckVertical(row, column)
 	if b.connected >= 4 {
 		return true, nil
 	} else {
@@ -46,10 +45,10 @@ func (b *Board) move(column int, row int, player string) (bool, error) {
 	return false, nil
 }
 
-// CheckHorizontal control function for horizonal matching
+// CheckHorizontal control function
 func (b *Board) CheckHorizontal(row int, column int) {
 	b.checkLeft(row, column)
-	if b.connected == 4 {
+	if b.connected >= 3 {
 		return
 	}
 
@@ -68,7 +67,7 @@ func (b *Board) checkLeft(row int, column int) {
 
 // Recursive function to check positions to the right
 func (b *Board) checkRight(row int, column int) {
-	if b.connected < 4 && column < 6 {
+	if b.connected < 3 && column < 6 {
 		if b.positions[row][column] == b.positions[row][column+1] {
 			b.connected++
 			b.checkRight(row, column+1)
@@ -76,18 +75,31 @@ func (b *Board) checkRight(row int, column int) {
 	}
 }
 
-func (b *Board) checkVertical(column int, row int) {
-	if b.connected < 4 && row > 0 {
-		if b.positions[column][row] == b.positions[column][row-1] {
+// CheckVertical control function
+func (b *Board) CheckVertical(row int, column int) {
+	b.checkUp(row, column)
+	if b.connected >= 3 {
+		return
+	}
+	b.checkDown(row, column)
+}
+
+// Recursive function to check positions above
+func (b *Board) checkUp(row int, column int) {
+	if b.connected < 3 && row > 0 {
+		if b.positions[row][column] == b.positions[row-1][column] {
 			b.connected++
-			b.checkVertical(column, row-1)
+			b.checkUp(row-1, column)
 		}
 	}
+}
 
-	if b.connected < 4 && row < 5 {
-		if b.positions[column][row] == b.positions[column][row+1] {
+// Recursive function to check positions below
+func (b *Board) checkDown(row int, column int) {
+	if b.connected < 3 && row < 5 {
+		if b.positions[row][column] == b.positions[row+1][column] {
 			b.connected++
-			b.checkVertical(column, row+1)
+			b.checkDown(row+1, column)
 		}
 	}
 }
