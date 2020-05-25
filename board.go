@@ -29,14 +29,14 @@ func (b *Board) move(column int, row int, player string) (bool, error) {
 	b.connected = 0
 
 	b.CheckVertical(row, column)
-	if b.connected >= 4 {
+	if b.connected >= 3 {
 		return true, nil
 	} else {
 		b.connected = 0
 	}
 
-	b.checkDiagonal(column, row)
-	if b.connected >= 4 {
+	b.CheckDiagonal(column, row)
+	if b.connected >= 3 {
 		return true, nil
 	} else {
 		b.connected = 0
@@ -77,34 +77,18 @@ func (b *Board) checkRight(row int, column int) {
 
 // CheckVertical control function
 func (b *Board) CheckVertical(row int, column int) {
-	b.checkUp(row, column)
-	if b.connected >= 3 {
-		return
-	}
-	b.checkDown(row, column)
-}
-
-// Recursive function to check positions above
-func (b *Board) checkUp(row int, column int) {
-	if b.connected < 3 && row > 0 {
-		if b.positions[row][column] == b.positions[row-1][column] {
-			b.connected++
-			b.checkUp(row-1, column)
+	if row >= 3 {
+		for i := row; i > 0; i-- {
+			if b.connected <= 3 {
+				if b.positions[row][column] == b.positions[row-1][column] {
+					b.connected++
+				}
+			}
 		}
 	}
 }
 
-// Recursive function to check positions below
-func (b *Board) checkDown(row int, column int) {
-	if b.connected < 3 && row < 5 {
-		if b.positions[row][column] == b.positions[row+1][column] {
-			b.connected++
-			b.checkDown(row+1, column)
-		}
-	}
-}
-
-func (b *Board) checkDiagonal(column int, row int) {
+func (b *Board) CheckDiagonal(column int, row int) {
 	b.checkLR(column, row)
 	if b.connected < 4 {
 		b.connected = 0
@@ -116,7 +100,7 @@ func (b *Board) checkLR(column int, row int) {
 	if (column > 0 && column < 6) && (row > 0 && row < 5) && b.connected < 4 {
 		if b.positions[column][row] == b.positions[column-1][row-1] {
 			b.connected++
-			b.checkDiagonal(column-1, row-1)
+			b.CheckDiagonal(column-1, row-1)
 		}
 		if b.positions[column][row] == b.positions[column+1][row+1] {
 			b.connected++
