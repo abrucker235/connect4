@@ -2,6 +2,86 @@ package connect4
 
 import "testing"
 
+func TestMoveHorizontal(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "red", "red", "red", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	actual, err := board.move(4, 2, "red")
+	if !actual && err != nil {
+		t.Errorf("Expected true got: %t", actual)
+	}
+}
+
+func TestMoveVertical(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"", "red", "", "", "", "", ""},
+		{"", "red", "", "", "", "", ""},
+		{"", "red", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	actual, err := board.move(1, 3, "red")
+	if !actual && err != nil {
+		t.Errorf("Expected true got: %t", actual)
+	}
+}
+
+func TestMoveDiagonal(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"red", "", "", "", "", "", ""},
+		{"", "red", "", "", "", "", ""},
+		{"", "", "red", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	actual, err := board.move(3, 3, "red")
+	if !actual && err != nil {
+		t.Errorf("Expected true got: %t", actual)
+	}
+}
+
+func TestMoveNonWin(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"", "red", "", "", "", "", ""},
+		{"", "red", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	actual, err := board.move(1, 2, "red")
+	if !actual && err != nil {
+		t.Errorf("Expected true got: %t", actual)
+	}
+}
+
+func TestMoveAlreadyTaken(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"", "red", "", "", "", "", ""},
+		{"", "red", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	actual, err := board.move(1, 1, "blue")
+	if actual || (err == nil && err.Error() == "Position already taken by: red") {
+		t.Errorf("Expected Position already taken by: red got: %s", err.Error())
+	}
+}
+
 func TestCheckHorizontalRL(t *testing.T) {
 	board := &Board{positions: [6][7]string{{"blue", "red", "red", "red", "red", "blue", "blue"}}, connected: 0}
 
@@ -225,7 +305,7 @@ func TestCheckDiagonalNonMatch(t *testing.T) {
 	}, connected: 0}
 
 	board.CheckDiagonal(5, 0)
-	if board.connected != 0 {
-		t.Errorf("Expect Connected: 0 got: %d", board.connected)
+	if board.connected != 1 {
+		t.Errorf("Expect Connected: 1 got: %d", board.connected)
 	}
 }

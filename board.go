@@ -1,7 +1,6 @@
 package connect4
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -17,10 +16,9 @@ type position struct {
 
 func (b *Board) move(column int, row int, player string) (bool, error) {
 	if position := b.positions[column][row]; position != "" {
-		return false, errors.New(fmt.Sprintf("Position already taken by: %s", position))
-	} else {
-		b.positions[column][row] = player
+		return false, fmt.Errorf("Position already taken by: %s", position)
 	}
+	b.positions[row][column] = player
 
 	b.CheckHorizontal(row, column)
 	if b.connected == 3 {
@@ -90,15 +88,13 @@ func (b *Board) CheckVertical(row int, column int) {
 func (b *Board) CheckDiagonal(row int, column int) {
 	b.checkDiagonalDownLeft(row, column)
 	b.checkDiagonalUpRight(row, column)
-	if b.connected != 3 {
-		b.connected = 0
+	if b.connected == 3 {
+		return
 	}
+	b.connected = 0
 
 	b.checkDiagonalDownRight(row, column)
 	b.checkDiagonalUpLeft(row, column)
-	if b.connected != 3 {
-		b.connected = 0
-	}
 }
 
 func (b *Board) checkDiagonalDownLeft(row int, column int) {
