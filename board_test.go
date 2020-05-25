@@ -182,7 +182,7 @@ func TestCheckDiagonalMiddleRL(t *testing.T) {
 	}
 }
 
-func TestCheckDiagonal1(t *testing.T) {
+func TestCheckDiagonalTopRight(t *testing.T) {
 	board := &Board{positions: [6][7]string{
 		{"", "", "", "", "", "", ""},
 		{"", "", "", "", "", "", ""},
@@ -198,7 +198,7 @@ func TestCheckDiagonal1(t *testing.T) {
 	}
 }
 
-func TestCheckDiagonal2(t *testing.T) {
+func TestCheckDiagonalTopLeft(t *testing.T) {
 	board := &Board{positions: [6][7]string{
 		{"", "", "", "", "", "", ""},
 		{"", "", "", "", "", "", ""},
@@ -214,7 +214,7 @@ func TestCheckDiagonal2(t *testing.T) {
 	}
 }
 
-func TestCheckDiagonal3(t *testing.T) {
+func TestCheckDiagonalNonMatch(t *testing.T) {
 	board := &Board{positions: [6][7]string{
 		{"", "", "", "", "", "", ""},
 		{"", "", "", "", "", "", ""},
