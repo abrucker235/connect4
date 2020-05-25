@@ -86,7 +86,7 @@ func TestCheckVerticalMiddle(t *testing.T) {
 	}
 }
 
-func TestCheckDiagonalLR(t *testing.T) {
+func TestCheckDiagonalDownLeft(t *testing.T) {
 	board := &Board{positions: [6][7]string{
 		{"red", "blue", "blue", "blue", "", "", ""},
 		{"", "red", "blue", "blue", "", "", ""},
@@ -96,8 +96,136 @@ func TestCheckDiagonalLR(t *testing.T) {
 		{"", "", "", "", "", "", ""},
 	}, connected: 0}
 
-	board.checkDiagonal(3, 3)
+	board.CheckDiagonal(3, 3)
 	if board.connected != 3 {
 		t.Errorf("Expect Connected: 3 got: %d", board.connected)
+	}
+}
+
+func TestCheckDiagonalUpRight(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"red", "blue", "blue", "blue", "", "", ""},
+		{"", "red", "blue", "blue", "", "", ""},
+		{"", "", "red", "blue", "", "", ""},
+		{"", "", "", "red", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	board.CheckDiagonal(0, 0)
+	if board.connected != 3 {
+		t.Errorf("Expect Connected: 3 got: %d", board.connected)
+	}
+}
+
+func TestCheckDiagonalMiddleLR(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"red", "blue", "blue", "blue", "", "", ""},
+		{"", "red", "blue", "blue", "", "", ""},
+		{"", "", "red", "blue", "", "", ""},
+		{"", "", "", "red", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	board.CheckDiagonal(2, 2)
+	if board.connected != 3 {
+		t.Errorf("Expect Connected: 3 got: %d", board.connected)
+	}
+}
+
+func TestCheckDiagonalDownRight(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"", "", "", "blue", "blue", "blue", "red"},
+		{"", "", "", "blue", "blue", "red", ""},
+		{"", "", "", "blue", "red", "", ""},
+		{"", "", "", "red", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	board.CheckDiagonal(3, 3)
+	if board.connected != 3 {
+		t.Errorf("Expect Connected: 3 got: %d", board.connected)
+	}
+}
+
+func TestCheckDiagonalUpLeft(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"", "", "", "blue", "blue", "blue", "red"},
+		{"", "", "", "blue", "blue", "red", ""},
+		{"", "", "", "blue", "red", "", ""},
+		{"", "", "", "red", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	board.CheckDiagonal(0, 6)
+	if board.connected != 3 {
+		t.Errorf("Expect Connected: 3 got: %d", board.connected)
+	}
+}
+
+func TestCheckDiagonalMiddleRL(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"", "", "", "blue", "blue", "blue", "red"},
+		{"", "", "", "blue", "blue", "red", ""},
+		{"", "", "", "blue", "red", "", ""},
+		{"", "", "", "red", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	board.CheckDiagonal(1, 5)
+	if board.connected != 3 {
+		t.Errorf("Expect Connected: 3 got: %d", board.connected)
+	}
+}
+
+func TestCheckDiagonal1(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "red", "", "", ""},
+		{"", "", "", "", "red", "", ""},
+		{"", "", "", "", "", "red", ""},
+		{"", "", "", "", "", "", "red"},
+	}, connected: 0}
+
+	board.CheckDiagonal(1, 5)
+	if board.connected != 3 {
+		t.Errorf("Expect Connected: 3 got: %d", board.connected)
+	}
+}
+
+func TestCheckDiagonal2(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "red", "", "", ""},
+		{"", "", "red", "", "", "", ""},
+		{"", "red", "", "", "", "", ""},
+		{"red", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	board.CheckDiagonal(1, 5)
+	if board.connected != 3 {
+		t.Errorf("Expect Connected: 3 got: %d", board.connected)
+	}
+}
+
+func TestCheckDiagonal3(t *testing.T) {
+	board := &Board{positions: [6][7]string{
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "", "", "", "", "", ""},
+		{"", "red", "", "", "", "", ""},
+		{"red", "", "", "", "", "", ""},
+	}, connected: 0}
+
+	board.CheckDiagonal(5, 0)
+	if board.connected != 0 {
+		t.Errorf("Expect Connected: 0 got: %d", board.connected)
 	}
 }

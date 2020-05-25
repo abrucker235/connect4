@@ -23,24 +23,22 @@ func (b *Board) move(column int, row int, player string) (bool, error) {
 	}
 
 	b.CheckHorizontal(row, column)
-	if b.connected >= 3 {
+	if b.connected == 3 {
 		return true, nil
 	}
 	b.connected = 0
 
 	b.CheckVertical(row, column)
-	if b.connected >= 3 {
+	if b.connected == 3 {
 		return true, nil
-	} else {
-		b.connected = 0
 	}
+	b.connected = 0
 
-	b.CheckDiagonal(column, row)
-	if b.connected >= 3 {
+	b.CheckDiagonal(row, column)
+	if b.connected == 3 {
 		return true, nil
-	} else {
-		b.connected = 0
 	}
+	b.connected = 0
 
 	return false, nil
 }
@@ -48,7 +46,7 @@ func (b *Board) move(column int, row int, player string) (bool, error) {
 // CheckHorizontal control function
 func (b *Board) CheckHorizontal(row int, column int) {
 	b.checkLeft(row, column)
-	if b.connected >= 3 {
+	if b.connected == 3 {
 		return
 	}
 
@@ -57,7 +55,7 @@ func (b *Board) CheckHorizontal(row int, column int) {
 
 // Recursive function to check positions to the left
 func (b *Board) checkLeft(row int, column int) {
-	if b.connected < 4 && column > 0 {
+	if b.connected < 3 && column > 0 {
 		if b.positions[row][column] == b.positions[row][column-1] {
 			b.connected++
 			b.checkLeft(row, column-1)
@@ -88,36 +86,53 @@ func (b *Board) CheckVertical(row int, column int) {
 	}
 }
 
-func (b *Board) CheckDiagonal(column int, row int) {
-	b.checkLR(column, row)
-	if b.connected < 4 {
+// CheckDiagonal control function
+func (b *Board) CheckDiagonal(row int, column int) {
+	b.checkDiagonalDownLeft(row, column)
+	b.checkDiagonalUpRight(row, column)
+	if b.connected != 3 {
 		b.connected = 0
-		b.checkRL(column, row)
+	}
+
+	b.checkDiagonalDownRight(row, column)
+	b.checkDiagonalUpLeft(row, column)
+	if b.connected != 3 {
+		b.connected = 0
 	}
 }
 
-func (b *Board) checkLR(column int, row int) {
-	if (column > 0 && column < 6) && (row > 0 && row < 5) && b.connected < 4 {
-		if b.positions[column][row] == b.positions[column-1][row-1] {
+func (b *Board) checkDiagonalDownLeft(row int, column int) {
+	if column > 0 && row > 0 && b.connected < 3 {
+		if b.positions[row][column] == b.positions[row-1][column-1] {
 			b.connected++
-			b.CheckDiagonal(column-1, row-1)
-		}
-		if b.positions[column][row] == b.positions[column+1][row+1] {
-			b.connected++
-			b.checkDiagonal(column-1, row+1)
+			b.checkDiagonalDownLeft(row-1, column-1)
 		}
 	}
 }
 
-func (b *Board) checkRL(column int, row int) {
-	if (column > 0 && column < 6) && (row > 0 && row < 5) && b.connected < 4 {
-		if b.positions[column][row] == b.positions[column-1][row+1] {
+func (b *Board) checkDiagonalUpRight(row int, column int) {
+	if column < 6 && row < 5 && b.connected < 3 {
+		if b.positions[row][column] == b.positions[row+1][column+1] {
 			b.connected++
-			b.checkDiagonal(column-1, row+1)
+			b.checkDiagonalUpRight(row+1, column+1)
 		}
-		if b.positions[column][row] == b.positions[column+1][row-1] {
+	}
+}
+
+func (b *Board) checkDiagonalUpLeft(row int, column int) {
+	if column > 0 && row < 5 && b.connected < 3 {
+		if b.positions[row][column] == b.positions[row+1][column-1] {
 			b.connected++
-			b.checkDiagonal(column+1, row-1)
+			b.checkDiagonalUpLeft(row+1, column-1)
+		}
+	}
+}
+
+func (b *Board) checkDiagonalDownRight(row int, column int) {
+	if column < 6 && row > 0 && b.connected < 3 {
+		if b.positions[row][column] == b.positions[row-1][column+1] {
+			b.connected++
+			b.checkDiagonalDownRight(row-1, column+1)
 		}
 	}
 }
